@@ -15,4 +15,6 @@ Library
   Exposed-modules:
     Math.LinearAlgebra.GramSchmidt
 
+  Hs-Source-Dirs: src
+
   ghc-options:       -w

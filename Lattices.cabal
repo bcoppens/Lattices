@@ -1,0 +1,18 @@
+Name:                Lattices
+Version:             0.0.0
+Category:            Math
+Description:         A library for lattices, in particular computing an LLL reduced basis for a lattice
+Author:              Bart Coppens
+Maintainer:          Bart Coppens <kde@bartcoppens.be>
+Build-Type:          Simple
+Cabal-Version:       >=1.2
+
+Library
+  Build-Depends:
+    base >= 4 && < 5,
+    HaskellForMaths >= 0.4.0
+
+  Exposed-modules:
+    Math.LinearAlgebra.GramSchmidt
+
+  ghc-options:       -w

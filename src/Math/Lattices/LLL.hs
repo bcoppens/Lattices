@@ -70,9 +70,8 @@ lovaszCondition bb k delta mu = (bb ! k) >= (delta - m^2)*(bb ! (k-1))
         m = mu ! (k, k-1)
 
 -- | Swaps $b_k$ and $b_{k-1}$, returns a triple: (new $b$, new $B$, new $\mu$)
-swapBaseVectors b bb mu k = (b, bb', mu'')
+swapBaseVectors b bb mu k n = (b, bb', mu'')
     where
-        n     = snd $ bounds b
         b'    = b // [ (k - 1, b ! k), (k, b ! (k-1)) ]
 
         m     = mu ! (k, k-1)
@@ -101,5 +100,5 @@ lllLoop b delta bb mu k n | k == n    = b
         (b', mu')        = sizeReduction k b mu
         isLovasz         = lovaszCondition bb k delta mu'
 
-        (b'', bb', mu'') = swapBaseVectors b' bb mu' k
+        (b'', bb', mu'') = swapBaseVectors b' bb mu' k n
         nextk            = min 1 $ k - 1

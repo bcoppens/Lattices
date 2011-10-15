@@ -52,10 +52,11 @@ lovaszCondition bb k delta mu = bb !! k >= (delta - m*m)*(bb !! (k-1))
     where
         m = (mu !! k) !! (k-1)
 
-swapBaseVectors b bb mu k = undefined
+-- | Swaps $b_k$ and $b_{k-1}$, returns a triple: (new $b$, new $B$, new $\mu$)
+swapBaseVectors b bb mu k = (b, bb', mu'')
     where
         n     = snd $ bounds b
-        b'    = swap b $ k - 1
+        b'    = b // [ (k - 1, b ! k), (k, b ! (k-1)) ]
 
         m     = mu ! (k, k-1)
         bb_k1 = bb ! (k-1)
@@ -72,12 +73,6 @@ swapBaseVectors b bb mu k = undefined
                 where
                     update_i_k1 i = (mu' ! (k, k-1)) * (mu' ! (i, k-1)) + (mu' ! (i, k)) - m*(mu' ! (i, k)) * (mu' ! (k, k-1))
                     update_i_k  i = (mu' ! (i, k-1)) - m * (mu' ! (i, k))
-
--- | Swap v_i and v_{i+1}
-swap v i = v // [ (i, v_i1), (i + 1, v_i) ]
-    where
-        v_i  = v ! i
-        v_i1 = v ! (i+1)
 
 lll' = undefined
 {-

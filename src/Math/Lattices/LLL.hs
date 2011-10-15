@@ -29,23 +29,28 @@ lllDelta basis delta = lll' basis delta gsB mu bi 1
         bi        = map norm2 gsB
 
 -- | Perform a size reduction. Returns the new $b_k$, the new $\mu_k$.
-sizeReduction b' k b mu = sizeReduction' b' k b_js b_k mu_k $ k-1
+sizeReduction k b mu = sizeReduction' indices k b mu
     where
-        b_js = reverse $ take k b
-        mu_k = mu !! (k-1)
-        b_k  = b  !! k
+        indices = reverse $ [0..k-2]
 
--- | Size reduction of the basis. Needs speeding up in lots of ways!. 'b_j:bs' is ordered to _descending js: $j = k - 1 \ldots 0$!.
---   Returns a tuple of the new $b_k$ and the new $\mu_k$.
-sizeReduction' _  _ []       b_k mu_k (-1)  = (b_k, mu_k)
-sizeReduction' b' k (b_j:bs) b_k mu_k j     = sizeReduction' b' k bs b_k' mu_k' $ j - 1
+sizeReduction' (l:ls) k b mu = sizeReduction' ls k b' mu'
     where
-        q_j    = toRational $ round $ mu_k !! j        -- TODO, sigh
-        b_k'   = b_k <-> (q_j *> b_j)
-        mu_k'  = take k $ map (slowMu b_k') b'
+        (b', mu') = sizeReduction'' k l b mu
+sizeReduction' []     _ b mu = (b, mu)
 
--- | Temporary function, we shouldn't recompute this every time!
-slowMu b_i b'_j = (b_i <.> b'_j) / (b'_j <.> b'_j)
+-- | Size reduction of the basis for a single index (k, l). Returns a tuple of the new $b_k$ and the new $\mu_k$.
+sizeReduction'' k l b mu = (b', mu'')
+    where
+        r    = toRational $ round $ mu ! (k, l)
+
+        b_k  = b ! k
+        b_l  = b ! l
+        b_k' = b_k <-> (r *> b_l)
+        b'   = b // [ (k, b_k') ]
+
+        mu'  = mu  // [ update | j      <- [0..l-2],
+                                 update <- [ ( (k, j), mu ! (k,j) - (r * mu ! (l,j)) ) ] ]
+        mu'' = mu' // [ ( (k, l), mu' ! (k, l) - r) ]
 
 -- | Returns whether the Lovász Condition holds: $B_k \geq \delta - \mu^2_{k,k-1}B_{k-1}$
 lovaszCondition bb k delta mu = bb !! k >= (delta - m*m)*(bb !! (k-1))
@@ -75,18 +80,9 @@ swapBaseVectors b bb mu k = (b, bb', mu'')
                     update_i_k  i = (mu' ! (i, k-1)) - m * (mu' ! (i, k))
 
 lll' = undefined
-{-
-lll' basis delta gsB mu bi k | k <= n    = lllLoop
-                             | otherwise = basis
-                             where
-                                n = undefined
 
 -- | The main loop of the LLL algorithm. We reduce basis 'b with $\delta$ 'delta, with a Gram-Schmidt basis $b^*$ as 'b and the $\mu_{i,j}$ coefficients in 'mu.
 --   The current iteration of the loop is 'k out of a maximum of 'n
-lllLoop b delta b mu k n | lovaszCondition bb k delta mu = lllLoop ... $ min 1 $ k - 1
-                             | otherwise                     = lllLoop basis delta gsB mu bi $ k + 1
-    then
-        
-    where
-        (bi', mu') = sizeReduction
--}
+--lllLoop b delta b mu k n | lovaszCondition bb k delta mu = lllLoop ... $ min 1 $ k - 1
+                         -- | otherwise                     = lllLoop basis delta gsB mu bi $ k + 1
+        -- (b', mu') = sizeReduction b'

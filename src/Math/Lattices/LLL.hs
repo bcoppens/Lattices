@@ -53,9 +53,9 @@ sizeReduction'' k l b mu = (b', mu'')
         mu'' = mu' // [ ( (k, l), mu' ! (k, l) - r) ]
 
 -- | Returns whether the Lovász Condition holds: $B_k \geq \delta - \mu^2_{k,k-1}B_{k-1}$
-lovaszCondition bb k delta mu = bb !! k >= (delta - m*m)*(bb !! (k-1))
+lovaszCondition bb k delta mu = (bb ! k) >= (delta - m^2)*(bb ! (k-1))
     where
-        m = (mu !! k) !! (k-1)
+        m = mu ! (k, k-1)
 
 -- | Swaps $b_k$ and $b_{k-1}$, returns a triple: (new $b$, new $B$, new $\mu$)
 swapBaseVectors b bb mu k = (b, bb', mu'')

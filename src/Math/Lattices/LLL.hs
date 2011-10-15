@@ -4,11 +4,14 @@ module Math.Lattices.LLL (
     lllDelta
 ) where
 
+import           Data.Array
 import           Data.Ratio
-import           Math.Algebra.LinearAlgebra
+import           Math.Algebra.LinearAlgebra     hiding ((!))
 import           Math.LinearAlgebra.GramSchmidt
 
 -- The $B_i$ set is called 'bb in this file, because of course we cannot call it 'B in Haskell.
+
+-- TODO ### use STUArray instead of lists, AAAARG silly Haskell
 
 -- | Just an easy way to write $||v||^2$
 norm2 v = v <*> v
@@ -25,7 +28,7 @@ lllDelta basis delta = lll' basis delta gsB mu bi 1
         (gsB, mu) = gramSchmidtOrthogonalization basis
         bi        = map norm2 gsB
 
--- | Perform a size reduction. Returns the new $b_k$, the new $\mu_k$. TODO: no new B_k, which is different from Steven Galbraith's explanation?
+-- | Perform a size reduction. Returns the new $b_k$, the new $\mu_k$.
 sizeReduction b' k b mu = sizeReduction' b' k b_js b_k mu_k $ k-1
     where
         b_js = reverse $ take k b
@@ -48,6 +51,33 @@ slowMu b_i b'_j = (b_i <.> b'_j) / (b'_j <.> b'_j)
 lovaszCondition bb k delta mu = bb !! k >= (delta - m*m)*(bb !! (k-1))
     where
         m = (mu !! k) !! (k-1)
+
+swapBaseVectors b bb mu k = undefined
+    where
+        n     = snd $ bounds b
+        b'    = swap b $ k - 1
+
+        m     = mu ! (k, k-1)
+        bb_k1 = bb ! (k-1)
+        bb_k  = bb ! k
+
+        btmp  = bb_k + m^2*bb_k1
+
+        bb'   = bb  // [ (k, bb_k1*bb_k/btmp), (k-1, btmp) ]
+
+        mu'   = mu  // [ update | j      <- [0..k-1],
+                                  update <- [ ( (k-1, j), mu!(k,j) ), ( (k, j), mu!(k-1, j)) ] ]
+        mu''  = mu' // [ update | i      <- [k+1..n],
+                                  update <- [ ( (i, k-1), update_i_k1 i), ( (i, k), update_i_k i) ] ]
+                where
+                    update_i_k1 i = (mu' ! (k, k-1)) * (mu' ! (i, k-1)) + (mu' ! (i, k)) - m*(mu' ! (i, k)) * (mu' ! (k, k-1))
+                    update_i_k  i = (mu' ! (i, k-1)) - m * (mu' ! (i, k))
+
+-- | Swap v_i and v_{i+1}
+swap v i = v // [ (i, v_i1), (i + 1, v_i) ]
+    where
+        v_i  = v ! i
+        v_i1 = v ! (i+1)
 
 lll' = undefined
 {-

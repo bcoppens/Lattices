@@ -70,7 +70,7 @@ lovaszCondition bb k delta mu = (bb ! k) >= (delta - m^2)*(bb ! (k-1))
         m = mu ! (k, k-1)
 
 -- | Swaps $b_k$ and $b_{k-1}$, returns a triple: (new $b$, new $B$, new $\mu$)
-swapBaseVectors b bb mu k n = (b', bb', mu'')
+swapBaseVectors b bb mu_ k n = (b', bb', mu'')
     where
         b'    = b // [ (k - 1, b ! k), (k, b ! (k-1)) ]
 
@@ -82,7 +82,9 @@ swapBaseVectors b bb mu k n = (b', bb', mu'')
 
         bb'   = bb  // [ (k, bb_k1*bb_k/btmp), (k-1, btmp) ]
 
-        mu'   = mu  // [ update | j      <- [0..k-1],
+        mu    = mu_ // [ ( (k, k-1), m*bb_k1*btmp ) ]
+
+        mu'   = mu  // [ update | j      <- [0..k-2],
                                   update <- [ ( (k-1, j), mu!(k,j) ), ( (k, j), mu!(k-1, j)) ] ]
         mu''  = mu' // [ update | i      <- [k+1..n],
                                   update <- [ ( (i, k-1), update_i_k1 i), ( (i, k), update_i_k i) ] ]

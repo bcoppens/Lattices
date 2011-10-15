@@ -32,7 +32,7 @@ lllDelta basis delta = lllLoop b' delta bb' mu' 1 n
         (b, mu) = gramSchmidtOrthogonalization basis
         bb      = map norm2 b
 
-        b'      = listArray (0, n) b
+        b'      = listArray (0, n) basis
         bb'     = listArray (0, n) bb
         mu'     = listArray ( (0, 0), (n, n) ) [ m | i     <- [0..n],
                                                      j     <- [0..n],

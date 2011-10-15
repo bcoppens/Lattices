@@ -42,7 +42,7 @@ lllDelta basis delta = lllLoop b' delta bb' mu' 1 n
 sizeReduction :: Int -> Basis -> GSO -> (Basis, GSO)
 sizeReduction k b mu = sizeReduction' indices k b mu
     where
-        indices = reverse $ [0..k-2]
+        indices = reverse $ [0..k-1]
 
 sizeReduction' (l:ls) k b mu = sizeReduction' ls k b' mu'
     where
@@ -59,7 +59,7 @@ sizeReduction'' k l b mu = (b', mu'')
         b_k' = b_k <-> (r *> b_l)
         b'   = b // [ (k, b_k') ]
 
-        mu'  = mu  // [ update | j      <- [0..l-2],
+        mu'  = mu  // [ update | j      <- [0..l-1],
                                  update <- [ ( (k, j), mu ! (k,j) - (r * mu ! (l,j)) ) ] ]
         mu'' = mu' // [ ( (k, l), mu' ! (k, l) - r) ]
 
@@ -70,7 +70,7 @@ lovaszCondition bb k delta mu = (bb ! k) >= (delta - m^2)*(bb ! (k-1))
         m = mu ! (k, k-1)
 
 -- | Swaps $b_k$ and $b_{k-1}$, returns a triple: (new $b$, new $B$, new $\mu$)
-swapBaseVectors b bb mu k n = (b, bb', mu'')
+swapBaseVectors b bb mu k n = (b', bb', mu'')
     where
         b'    = b // [ (k - 1, b ! k), (k, b ! (k-1)) ]
 

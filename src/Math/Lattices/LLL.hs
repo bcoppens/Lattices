@@ -92,7 +92,7 @@ swapBaseVectors b bb mu_ k n = (b', bb', mu'')
 
         bb'   = bb  // [ (k, bb_k1*bb_k/btmp), (k-1, btmp) ]
 
-        mu    = mu_ // [ ( (k, k-1), m*bb_k1*btmp ) ]
+        mu    = mu_ // [ ( (k, k-1), m*bb_k1/btmp ) ]
 
         mu'   = mu  // [ update | j      <- [0..k-2],
                                   update <- [ ( (k-1, j), mu!(k,j) ), ( (k, j), mu!(k-1, j)) ] ]

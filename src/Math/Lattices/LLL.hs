@@ -105,7 +105,7 @@ swapBaseVectors b bb mu_ k n = (b', bb', mu'')
 -- | The main loop of the LLL algorithm. We reduce basis 'b with $\delta$ 'delta, with a Gram-Schmidt basis $b^*$ as 'b and the $\mu_{i,j}$ coefficients in 'mu.
 --   The current iteration of the loop is 'k out of a maximum of 'n
 lllLoop :: Basis -> Rational -> Array Int Rational -> GSO -> Int -> Int -> Basis
-lllLoop b delta bb mu k n | k == n    = b
+lllLoop b delta bb mu k n | k > n     = b
                           | isLovasz  = lllLoop b'  delta bb  mu'  (k+1) n
                           | otherwise = lllLoop b'' delta bb' mu'' nextk n
     where
@@ -113,4 +113,4 @@ lllLoop b delta bb mu k n | k == n    = b
         isLovasz         = lovaszCondition bb k delta mu'
 
         (b'', bb', mu'') = swapBaseVectors b' bb mu' k n
-        nextk            = min 1 $ k - 1
+        nextk            = max 1 $ min 1 $ k - 1

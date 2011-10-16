@@ -113,4 +113,4 @@ lllLoop b delta bb mu k n | k > n     = b
         isLovasz         = lovaszCondition bb k delta mu'
 
         (b'', bb', mu'') = swapBaseVectors b' bb mu' k n
-        nextk            = max 1 $ min 1 $ k - 1
+        nextk            = max 1 $ k - 1

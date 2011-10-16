@@ -1,0 +1,8 @@
+A very basic LLL (Lenstra-Lenstra-Lovász) lattice reduction algorithm in Haskell.
+
+* As of now, it works on 2 small test cases, but not on larger ones.
+* There are *no* optimizations implemented yet
+* The interface is currently not well-designed, it should of course take at least Integer instead of Rational
+* Need to implement Babai's CVP algorithm
+* etc
+

@@ -84,9 +84,9 @@ swapBaseVectors b bb mu_ k n = (b', bb', mu'')
     where
         b'    = b // [ (k - 1, b ! k), (k, b ! (k-1)) ]
 
-        m     = mu ! (k, k-1)
-        bb_k1 = bb ! (k-1)
-        bb_k  = bb ! k
+        m     = mu_ ! (k, k-1)
+        bb_k1 = bb  ! (k-1)
+        bb_k  = bb  ! k
 
         btmp  = bb_k + m^2*bb_k1
 

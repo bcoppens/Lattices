@@ -1,11 +1,15 @@
 -- | Implements a *very* basic LLL (Lenstra-Lenstra-Lovász) lattice reduction algorithm. This version uses exact arithmetic over the rationals.
---   References:
+--   References for the LLL algorithm:
 --   * Factoring Polynomials with Rational Coefficients, Arjen K Lenstra, Hendrik W Lenstra Jr, and László Lovász. Mathematische Annalen 261, 515-534 (1982)
 --   * Mathematics of Public Key Cryptography, Steven Galbraith. Chapter 17 of draft 1.0
 --   * Modern Computer Algebra, second edition, Joachim von zur Gathen and Jürgen Gerhard. Chapter 16.
+--   References for Babai's Nearest Plane Method for the Closest Vector Problem:
+--   * On Lovász' Lattice Reduction And The Nearest Lattice Point Problem, László Babai. Combinatorica 6 (1), 1-13 (1986).
+--   * Mathematics of Public Key Cryptography, Steven Galbraith. Chapter 18 of draft 1.0
 module Math.Lattices.LLL (
     lll,
-    lllDelta
+    lllDelta,
+    closeVector
 ) where
 
 import           Data.Array
@@ -123,3 +127,31 @@ lllLoop b delta bb mu k n | k > n     = b
 -- Two small test cases (will put into unit tests):
 -- lll $ [ [12, 2], [13, 4] ]
 -- lll $ [ [1, 0, 0], [4, 2, 15], [0, 0, 3] ]
+
+-- Babai's Algorithm for CVP
+
+-- | Find a lattice vector in 'basis close to 'x'. 'basis' is assumed to be LLL-reduced
+closeVector basis x = babaiNP basis b' d x
+    where
+        b' = gramSchmidtBasis basis
+        d  = length basis - 1
+
+projectTo v b = (v <.> b) / (norm2 b)
+
+vsum = foldl1 (<+>)
+
+-- TODO also Data.Array
+-- | Find a close vector to 'x using Babai's Nearest Plane Method. 'b is an LLL-reduced basis, 'b'' is its Gram-Schmidt basis d is the size of the (sub)space.
+babaiNP :: [[Rational]] -> [[Rational]] -> Int -> [Rational] -> [Rational]
+babaiNP _ _  1 x = x
+babaiNP b b' d x = v <+> recurse
+    where
+        d1      = d - 1
+        gamma   = map (projectTo x) b'
+        gamma_d = gamma !! d
+        delta   :: Rational
+        delta   = toRational $ round $ gamma_d
+        x'_1    = vsum $ zipWith (*>) (take d1 gamma) (take d1 b')
+        x'      = x'_1 <+> (delta *> (b'!!d))
+        v       = delta *> (b!!d)
+        recurse = babaiNP b b' d1 (x' <-> v)

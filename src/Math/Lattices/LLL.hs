@@ -26,7 +26,7 @@ norm2 v = v <.> v
 lll basis = lllDelta basis $ 3%4
 
 -- | Return an LLL reduced basis, with reduction parameter $\delta$. This is the conventional flavor of the algorithm using Gram-Schmidt, no fancy speedups yet
-lllDelta basis delta = lllLoop b' delta bb' mu' 1 n
+lllDelta basis delta = lllLoop b' delta bb' mu_arr 1 n
     where
         n       = length basis - 1
         (b, mu) = gramSchmidtOrthogonalization basis
@@ -34,9 +34,19 @@ lllDelta basis delta = lllLoop b' delta bb' mu' 1 n
 
         b'      = listArray (0, n) basis
         bb'     = listArray (0, n) bb
-        mu'     = listArray ( (0, 0), (n, n) ) [ m | i     <- [0..n],
-                                                     j     <- [0..n],
-                                                     let m =  (mu !! i) !! j ] -- TODO
+
+        -- TODO: reuse mu from GSO!!!
+        mu_arr  = array ( ((0, 0), (n, n) ) ) [ ( (i,j), m ) | i     <- [0..n],
+                                                               j     <- [0..n],
+                                                               let m = (basis !! i <.> (b !! j)) / (norm2 $ b !! j) ]
+{-
+        mu_arr  = array ( (0, 0), (n, n) ) [ ((i,j), m) | i     <- [0..n],
+                                                          j     <- [0..n],
+                                                          let m = if ( i == j) then (toRational 1) else (toRational 0) ]
+        mu_arr' = mu_arr' // [ ( (i, j), m ) | i     <- [0..n-1],
+                                               j     <- [0..n-1],
+                                               let m =  (mu !! i) !! j ] -- TODO
+-}
 
 -- | Perform a size reduction. Returns the new $b_k$, the new $\mu_k$.
 sizeReduction :: Int -> Basis -> GSO -> (Basis, GSO)

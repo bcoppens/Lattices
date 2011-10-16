@@ -1,4 +1,8 @@
--- | Implements a *very* basic LLL (Lenstra-Lenstra-Lovász) lattice reduction algorithm.
+-- | Implements a *very* basic LLL (Lenstra-Lenstra-Lovász) lattice reduction algorithm. This version uses exact arithmetic over the rationals.
+--   References:
+--   * Factoring Polynomials with Rational Coefficients, Arjen K Lenstra, Hendrik W Lenstra Jr, and László Lovász. Mathematische Annalen 261, 515-534 (1982)
+--   * Mathematics of Public Key Cryptography, Steven Galbraith. Chapter 17 of draft 1.0
+--   * Modern Computer Algebra, second edition, Joachim von zur Gathen and Jürgen Gerhard. Chapter 16.
 module Math.Lattices.LLL (
     lll,
     lllDelta
@@ -114,3 +118,8 @@ lllLoop b delta bb mu k n | k > n     = b
 
         (b'', bb', mu'') = swapBaseVectors b' bb mu' k n
         nextk            = max 1 $ k - 1
+
+
+-- Two small test cases (will put into unit tests):
+-- lll $ [ [12, 2], [13, 4] ]
+-- lll $ [ [1, 0, 0], [4, 2, 15], [0, 0, 3] ]

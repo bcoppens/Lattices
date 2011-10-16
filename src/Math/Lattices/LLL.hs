@@ -131,27 +131,26 @@ lllLoop b delta bb mu k n | k > n     = b
 -- Babai's Algorithm for CVP
 
 -- | Find a lattice vector in 'basis close to 'x'. 'basis' is assumed to be LLL-reduced
-closeVector basis x = babaiNP basis b' d x
+closeVector basis x = foldl1 (<+>) $ babaiNP (reverse $ [0..d]) basis b' x
     where
         b' = gramSchmidtBasis basis
         d  = length basis - 1
 
 projectTo v b = (v <.> b) / (norm2 b)
 
-vsum = foldl1 (<+>)
+vsum zero = foldl (<+>) zero
 
 -- TODO also Data.Array
 -- | Find a close vector to 'x using Babai's Nearest Plane Method. 'b is an LLL-reduced basis, 'b'' is its Gram-Schmidt basis d is the size of the (sub)space.
-babaiNP :: [[Rational]] -> [[Rational]] -> Int -> [Rational] -> [Rational]
-babaiNP _ _  1 x = x
-babaiNP b b' d x = v <+> recurse
+babaiNP []     _ _  _ = []
+babaiNP (i:is) b b' w = y_i : recurse
     where
-        d1      = d - 1
-        gamma   = map (projectTo x) b'
-        gamma_d = gamma !! d
-        delta   :: Rational
-        delta   = toRational $ round $ gamma_d
-        x'_1    = vsum $ zipWith (*>) (take d1 gamma) (take d1 b')
-        x'      = x'_1 <+> (delta *> (b'!!d))
-        v       = delta *> (b!!d)
-        recurse = babaiNP b b' d1 (x' <-> v)
+        l       = map (projectTo w) b'
+        delta   = toRational $ round $ l !! i
+        y_i     = delta *> (b !! i)
+
+        zero    = replicate (length w) $ toRational 0
+        thesum  = vsum zero $ zipWith (*>) (take i l) (take i b')
+        w_i1    = ((delta *> (b' !! i)) <-> y_i) <+> thesum
+
+        recurse = babaiNP is b b' w_i1

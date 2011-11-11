@@ -145,12 +145,11 @@ vsum zero = foldl (<+>) zero
 babaiNP []     _ _  _ = []
 babaiNP (i:is) b b' w = y_i : recurse
     where
-        l       = map (projectTo w) b'
-        delta   = toRational $ rnd $ l !! i
+        l_i     = projectTo w (b'!!i)
+        delta   = toRational $ rnd $ l_i
         y_i     = delta *> (b !! i)
 
         zero    = replicate (length w) $ toRational 0
-        thesum  = vsum zero $ zipWith (*>) (take i l) (take i b')
-        w_i1    = ((delta *> (b' !! i)) <-> y_i) <+> thesum
+        w_i1    = w <-> (l_i *> (b'!!i)) <+> (delta *> (b'!!i)) <-> y_i
 
         recurse = babaiNP is b b' w_i1

@@ -28,7 +28,7 @@ type GSO   = Array (Int, Int) Rational
 norm2 v = v <.> v
 
 -- | Closest 'Integral to the given n, rounding down (TODO: up?). $\lfloor n\rceil$
--- rnd = round
+rnd x = floor $ x + 1%2
 
 -- | Return an LLL reduced basis. This calls 'lllDelta with a default parameter $\delta = 3/4$
 lll basis = lllDelta basis $ 3%4
@@ -146,7 +146,7 @@ babaiNP []     _ _  _ = []
 babaiNP (i:is) b b' w = y_i : recurse
     where
         l       = map (projectTo w) b'
-        delta   = toRational $ round $ l !! i
+        delta   = toRational $ rnd $ l !! i
         y_i     = delta *> (b !! i)
 
         zero    = replicate (length w) $ toRational 0

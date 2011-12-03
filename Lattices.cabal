@@ -7,6 +7,11 @@ Maintainer:          Bart Coppens <kde@bartcoppens.be>
 Build-Type:          Simple
 Cabal-Version:       >=1.2
 
+Source-Repository    head
+  type:              git
+  location:          git://github.com/bcoppens/Lattices.git
+
+
 Library
   Build-Depends:
     base >= 4 && < 5,
@@ -20,3 +25,22 @@ Library
   Hs-Source-Dirs: src
 
   ghc-options:       -w
+
+Flag test
+  Description: Build the test suite
+  Default: False
+
+Executable test
+  Hs-Source-Dirs:  src, tests
+  Main-Is:         TestSuite.hs
+
+  Build-Depends:
+    base >= 4 && < 5,
+    HaskellForMaths >= 0.4.0,
+    array >= 0.3,
+    test-framework >= 0.4,
+    test-framework-hunit >= 0.2,
+    HUnit >= 1.2
+
+  if !flag(test)
+    buildable:     False

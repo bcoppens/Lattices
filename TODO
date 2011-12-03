@@ -1,0 +1,3 @@
+* in lllDelta, reuse the GSO for filling in mu_arr
+* see if there are even more efficient arrays I should use
+* also use arrays for Babai's algorithm

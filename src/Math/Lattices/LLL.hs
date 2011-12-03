@@ -22,8 +22,6 @@ type GSO   = Array (Int, Int) Rational
 
 -- The $B_i$ set is called 'bb in this file, because of course we cannot call it 'B in Haskell.
 
--- TODO ### use STUArray instead of lists, AAAARG silly Haskell
-
 -- | Just an easy way to write $||v||^2$
 norm2 v = v <.> v
 
@@ -47,14 +45,6 @@ lllDelta basis delta = lllLoop b' delta bb' mu_arr 1 n
         mu_arr  = array ( ((0, 0), (n, n) ) ) [ ( (i,j), m ) | i     <- [0..n],
                                                                j     <- [0..n],
                                                                let m = (basis !! i <.> (b !! j)) / (norm2 $ b !! j) ]
-{-
-        mu_arr  = array ( (0, 0), (n, n) ) [ ((i,j), m) | i     <- [0..n],
-                                                          j     <- [0..n],
-                                                          let m = if ( i == j) then (toRational 1) else (toRational 0) ]
-        mu_arr' = mu_arr' // [ ( (i, j), m ) | i     <- [0..n-1],
-                                               j     <- [0..n-1],
-                                               let m =  (mu !! i) !! j ] -- TODO
--}
 
 -- | Perform a size reduction. Returns the new $b_k$, the new $\mu_k$.
 sizeReduction :: Int -> Basis -> GSO -> (Basis, GSO)

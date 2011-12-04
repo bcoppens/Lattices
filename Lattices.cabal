@@ -6,7 +6,7 @@ Description:         A library for lattices, in particular for computing an LLL 
 Author:              Bart Coppens
 Maintainer:          Bart Coppens <kde@bartcoppens.be>
 Build-Type:          Simple
-Cabal-Version:       >=1.6
+Cabal-Version:       >=1.8
 
 License:             GPL
 License-file:        LICENSE
@@ -14,6 +14,9 @@ License-file:        LICENSE
 Extra-Source-Files:
   README
   TODO
+  tests/TestSuite.hs
+  tests/Math/LinearAlgebra/GramSchmidt/Tests.hs
+  tests/Math/Lattices/LLL/Tests.hs
 
 
 Source-Repository    head
@@ -47,6 +50,3 @@ Test-Suite test-all
     test-framework-hunit >= 0.2,
     HUnit >= 1.2
 
-  Other-Modules:
-    Math.LinearAlgebra.GramSchmidt.Tests
-    Math.Lattices.LLL.Tests

@@ -1,15 +1,23 @@
 -- | Implements a *very* basic LLL (Lenstra-Lenstra-Lovász) lattice reduction algorithm. This version uses exact arithmetic over the rationals.
 --   References for the LLL algorithm:
+--
 --   * Factoring Polynomials with Rational Coefficients, Arjen K Lenstra, Hendrik W Lenstra Jr, and László Lovász. Mathematische Annalen 261, 515-534 (1982)
+--
 --   * Mathematics of Public Key Cryptography, Steven Galbraith. Chapter 17 of draft 1.0
+--
 --   * Modern Computer Algebra, second edition, Joachim von zur Gathen and Jürgen Gerhard. Chapter 16.
+--
 --   References for Babai's Nearest Plane Method for the Closest Vector Problem:
+--
 --   * On Lovász' Lattice Reduction And The Nearest Lattice Point Problem, László Babai. Combinatorica 6 (1), 1-13 (1986).
+--
 --   * Mathematics of Public Key Cryptography, Steven Galbraith. Chapter 18 of draft 1.0
+--
 module Math.Lattices.LLL (
     lll,
     lllDelta,
-    closeVector
+    closeVector,
+    Basis(..)
 ) where
 
 import           Data.Array
@@ -17,6 +25,7 @@ import           Data.Ratio
 import           Math.Algebra.LinearAlgebra     hiding ((!))
 import           Math.LinearAlgebra.GramSchmidt
 
+-- | A matrix representing a basis
 type Basis = Array Int [Rational]
 type GSO   = Array (Int, Int) Rational
 
@@ -28,10 +37,12 @@ norm2 v = v <.> v
 -- | Closest 'Integral to the given n, rounding up. $\lfloor n\rceil$
 rnd x = floor $ x + 1%2
 
--- | Return an LLL reduced basis. This calls 'lllDelta with a default parameter $\delta = 3/4$
+-- |Return an LLL reduced basis. This calls 'lllDelta with a default parameter $\delta = 3/4$
+lll :: [[Rational]] -> Basis
 lll basis = lllDelta basis $ 3%4
 
 -- | Return an LLL reduced basis, with reduction parameter $\delta$. This is the conventional flavor of the algorithm using Gram-Schmidt, no fancy speedups yet
+lllDelta :: [[Rational]] -> Rational -> Basis
 lllDelta basis delta = lllLoop b' delta bb' mu_arr 1 n
     where
         n       = length basis - 1
@@ -121,6 +132,7 @@ lllLoop b delta bb mu k n | k > n     = b
 -- Babai's Algorithm for CVP
 
 -- | Find a lattice vector in 'basis close to 'x'. 'basis' is assumed to be LLL-reduced
+closeVector :: [[Rational]] -> [Ratio Integer] -> [Rational]
 closeVector basis x = foldl1 (<+>) $ babaiNP (reverse $ [0..d]) basis' b' x
     where
         d      = length basis - 1

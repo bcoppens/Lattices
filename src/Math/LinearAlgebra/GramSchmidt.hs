@@ -7,10 +7,12 @@ module Math.LinearAlgebra.GramSchmidt (
 import           Math.Algebra.LinearAlgebra
 
 -- | Given a basis, return the Gram-Schmidt orhthogonal basis
+gramSchmidtBasis :: Fractional a => [[a]] -> [[a]]
 gramSchmidtBasis a = fst $ gramSchmidtOrthogonalization a
 
 -- | Given a basis, return the Gram-Schmidt orthogonalization, which is a tuple with the Gram-Schmidt orthogonal basis first, and the
 --   $\mu_{i,j} = \langle b_i, b^*_j \rangle / \langle b^*_j, b^*_j \rangle$ triangular matrix second, for $1 \leq j < i < n$.
+gramSchmidtOrthogonalization :: Fractional a => [[a]] -> ([[a]], [[a]])
 gramSchmidtOrthogonalization (b0:bs) = gs bs [b0] []
 
 -- TODO get rid of the (++) used like this, to make it faster

@@ -121,10 +121,11 @@ lllLoop b delta bb mu k n | k > n     = b
 -- Babai's Algorithm for CVP
 
 -- | Find a lattice vector in 'basis close to 'x'. 'basis' is assumed to be LLL-reduced
-closeVector basis x = foldl1 (<+>) $ babaiNP (reverse $ [0..d]) basis b' x
+closeVector basis x = foldl1 (<+>) $ babaiNP (reverse $ [0..d]) basis' b' x
     where
-        b' = gramSchmidtBasis basis
-        d  = length basis - 1
+        d      = length basis - 1
+        b'     = listArray (0, d) $ gramSchmidtBasis basis
+        basis' = listArray (0, d) basis
 
 projectTo v b = (v <.> b) / (norm2 b)
 
@@ -134,10 +135,10 @@ vsum zero = foldl (<+>) zero
 babaiNP []     _ _  _ = []
 babaiNP (i:is) b b' w = y_i : recurse
     where
-        l_i     = projectTo w (b'!!i)
+        l_i     = projectTo w $ b' ! i
         delta   = toRational $ rnd $ l_i
-        y_i     = delta *> (b !! i)
+        y_i     = delta *> b ! i
 
-        w_i1    = w <-> (l_i - delta) *> (b'!!i) <-> y_i
+        w_i1    = w <-> (l_i - delta) *> (b' ! i) <-> y_i
 
         recurse = babaiNP is b b' w_i1

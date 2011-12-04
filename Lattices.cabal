@@ -34,13 +34,10 @@ Library
 
   ghc-options:       -w
 
-Flag test
-  Description: Build the test suite
-  Default: False
-
-Executable test
+Test-Suite test-all
   Hs-Source-Dirs:  src, tests
   Main-Is:         TestSuite.hs
+  Type:            exitcode-stdio-1.0
 
   Build-Depends:
     base >= 4 && < 5,
@@ -53,7 +50,3 @@ Executable test
   Other-Modules:
     Math.LinearAlgebra.GramSchmidt.Tests
     Math.Lattices.LLL.Tests
-
-
-  if !flag(test)
-    buildable:     False

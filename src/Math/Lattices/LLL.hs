@@ -25,7 +25,7 @@ type GSO   = Array (Int, Int) Rational
 -- | Just an easy way to write $||v||^2$
 norm2 v = v <.> v
 
--- | Closest 'Integral to the given n, rounding down (TODO: up?). $\lfloor n\rceil$
+-- | Closest 'Integral to the given n, rounding up. $\lfloor n\rceil$
 rnd x = floor $ x + 1%2
 
 -- | Return an LLL reduced basis. This calls 'lllDelta with a default parameter $\delta = 3/4$
@@ -139,7 +139,6 @@ babaiNP (i:is) b b' w = y_i : recurse
         delta   = toRational $ rnd $ l_i
         y_i     = delta *> (b !! i)
 
-        zero    = replicate (length w) $ toRational 0
-        w_i1    = w <-> (l_i *> (b'!!i)) <+> (delta *> (b'!!i)) <-> y_i
+        w_i1    = w <-> (l_i - delta) *> (b'!!i) <-> y_i
 
         recurse = babaiNP is b b' w_i1

@@ -22,10 +22,19 @@ simpleLLLTest2  = equalsArray computed ok
         ok       = [ [1 % 1,0 % 1,0 % 1], [0 % 1,2 % 1,0 % 1], [0 % 1,0 % 1,3 % 1] ]
         computed = lll $ [ [1, 0, 0], [4, 2, 15], [0, 0, 3] ]
 
+
+closeVectorTest = H.assert $ ok == closeVector basis x
+    where
+        basis = map (map toRational) [ [1, 2, 3], [3, 0, -3], [3, -7, 3] ]
+        x     = [10 % 1, 6 % 1, 5 % 1]
+        ok    = [10 % 1,8 % 1,6 % 1]
+
+
 tests :: [Test]
 tests = concat
     [
       [testCase "Simple LLL test 1" simpleLLLTest1],
-      [testCase "Simple LLL test 2" simpleLLLTest2]
+      [testCase "Simple LLL test 2" simpleLLLTest2],
+      [testCase "Simple CVP test" closeVectorTest]
     ]
 

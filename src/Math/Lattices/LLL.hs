@@ -130,7 +130,6 @@ projectTo v b = (v <.> b) / (norm2 b)
 
 vsum zero = foldl (<+>) zero
 
--- TODO also Data.Array
 -- | Find a close vector to 'x using Babai's Nearest Plane Method. 'b is an LLL-reduced basis, 'b'' is its Gram-Schmidt basis d is the size of the (sub)space.
 babaiNP []     _ _  _ = []
 babaiNP (i:is) b b' w = y_i : recurse

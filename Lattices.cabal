@@ -1,16 +1,24 @@
 Name:                Lattices
 Version:             0.0.1
 Category:            Math
-Description:         A library for lattices, in particular computing an LLL reduced basis for a lattice
+Synopsis:            A library for lattices
+Description:         A library for lattices, in particular for computing an LLL reduced basis for a lattice and finding a close lattice vector
 Author:              Bart Coppens
 Maintainer:          Bart Coppens <kde@bartcoppens.be>
 Build-Type:          Simple
-Cabal-Version:       >=1.2
+Cabal-Version:       >=1.6
+
+License:             GPL
+License-file:        LICENSE
+
+Extra-Source-Files:
+  README
+  TODO
+
 
 Source-Repository    head
   type:              git
   location:          git://github.com/bcoppens/Lattices.git
-
 
 Library
   Build-Depends:
@@ -41,6 +49,11 @@ Executable test
     test-framework >= 0.4,
     test-framework-hunit >= 0.2,
     HUnit >= 1.2
+
+  Other-Modules:
+    Math.LinearAlgebra.GramSchmidt.Tests
+    Math.Lattices.LLL.Tests
+
 
   if !flag(test)
     buildable:     False

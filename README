@@ -3,6 +3,5 @@ A very basic LLL (Lenstra-Lenstra-Lovász) lattice reduction algorithm in Haskel
 * As of now, it seems to work on 2 small test cases and on some larger ones. I need to generate tests for it, for example comparing it to NTL's LLL output
 * There are *no* optimizations implemented yet
 * The interface is currently not well-designed, it should of course take at least Integer instead of Rational
-* Need to implement Babai's CVP algorithm
 * etc
 

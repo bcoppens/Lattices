@@ -1,3 +1,5 @@
 * in lllDelta, reuse the GSO for filling in mu_arr
 * see if there are even more efficient arrays I should use
 * maybe let the GSO / LLL algorithms return a Data.Array instead of converting back/from lists?
+* use Array in GSO's gs function
+* implement (algorithmic/implementational) speedups! :-)

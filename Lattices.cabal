@@ -34,6 +34,7 @@ Library
     Math.LinearAlgebra.GramSchmidt
     Math.Lattices.CloseVector
     Math.Lattices.LLL
+    Math.Lattices.LLLFP
 
   Hs-Source-Dirs: src
 

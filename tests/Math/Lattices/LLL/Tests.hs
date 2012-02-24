@@ -9,6 +9,7 @@ import           Test.Framework.Providers.HUnit
 import           Data.Ratio
 import           Data.Array
 import           Math.Lattices.LLL
+import           Math.Lattices.CloseVector
 
 equalsArray computed ok = H.assert $ elems computed == ok
 

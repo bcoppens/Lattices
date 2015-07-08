@@ -13,6 +13,7 @@ module Math.Lattices.LLL (
     Basis(..)
 ) where
 
+import           Prelude                        hiding ((*>))
 import           Data.Array
 import           Data.Ratio
 import           Math.Algebra.LinearAlgebra     hiding ((!))

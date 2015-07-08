@@ -4,6 +4,7 @@ module Math.LinearAlgebra.GramSchmidt (
     gramSchmidtOrthogonalization
 ) where
 
+import           Prelude                    hiding ((*>))
 import           Math.Algebra.LinearAlgebra
 
 -- | Given a basis, return the Gram-Schmidt orhthogonal basis

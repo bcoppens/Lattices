@@ -1,5 +1,5 @@
 Name:                Lattices
-Version:             0.0.1
+Version:             0.0.2
 Category:            Math
 Synopsis:            A library for lattices
 Description:         A library for lattices, in particular for computing an LLL reduced basis for a lattice and finding a close lattice vector

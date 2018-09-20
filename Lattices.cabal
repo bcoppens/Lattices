@@ -1,5 +1,5 @@
 Name:                Lattices
-Version:             0.0.2
+Version:             0.0.3
 Category:            Math
 Synopsis:            A library for lattices
 Description:         A library for lattices, in particular for computing an LLL reduced basis for a lattice and finding a close lattice vector
@@ -14,15 +14,10 @@ License-file:        LICENSE
 Extra-Source-Files:
   README
   TODO
-  src/Math/Lattices/Internal.hs
-  tests/TestSuite.hs
-  tests/Math/LinearAlgebra/GramSchmidt/Tests.hs
-  tests/Math/Lattices/LLL/Tests.hs
-
 
 Source-Repository    head
   type:              git
-  location:          git://github.com/bcoppens/Lattices.git
+  location:          https://github.com/bcoppens/Lattices.git
 
 Library
   Build-Depends:
@@ -36,6 +31,9 @@ Library
     Math.Lattices.LLL
     Math.Lattices.LLLFP
 
+  Other-modules:
+    Math.Lattices.Internal
+
   Hs-Source-Dirs: src
 
   ghc-options:       -w
@@ -44,6 +42,16 @@ Test-Suite test-all
   Hs-Source-Dirs:  src, tests
   Main-Is:         TestSuite.hs
   Type:            exitcode-stdio-1.0
+
+  Other-modules:
+    Math.LinearAlgebra.GramSchmidt.Tests
+    Math.Lattices.LLL.Tests
+    Math.LinearAlgebra.GramSchmidt
+    Math.Lattices.CloseVector
+    Math.Lattices.LLL
+    Math.Lattices.LLLFP
+    Math.Lattices.Internal
+
 
   Build-Depends:
     base >= 4 && < 5,
